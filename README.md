@@ -44,6 +44,48 @@ Use the "EzFamilyCache<T>" to create caches that will cache component families a
 Extend the "EzComponent" script to create your own components and add them to a GameObject that has an EzEntity.
 The Entity should be a child of an EzSpace.
 
+# What is an Entity? (EzEntity.cs)
+
+A container of components (EzComponent.cs) that store just data.
+
+It could be a player, enemy, projectile... any source of data that requires game logic.
+
+We add entities as children to Spaces (EzSpace.cs) which manage them in isolation.
+
+# What is an Entity Component? (EzComponent.cs)
+
+A discrete set of data that can be modified at run time.
+
+Unlike the "Unity components", EzComponents should be full of data instead of behaviour.
+
+There should never be a component that has an Update feature if it is a true EzComponent
+because the Component System's will handle all that!
+
+Every time you add an EntityComponent to an Entity, the systems can use an EntityFamilyCache to
+automatically filter out and align the components so that they can be processed.
+
+# What is an Entity System?
+
+A process that can listen to Families of components being added/removed and iterate over them.
+
+Entity systems can implement the following interfaces:
+
+- IUpdateableSystem
+- IFixedUpdatableSystem
+- ILateUpdatableSystem
+
+To hook into the required update process when needed.
+
+These systems will be called and excuted in a Priority order that can be automatically sorted
+within the EntitySpace.
+
+
+# What is an Entity Space? (EzSpace.cs)
+
+An isolated container of Entities that has a number of ordered systems processing components from the registered entities inside.
+
+An Entity can be moved at will into a totally different space at run-time, allowing it to inhibit different behaviour via the exact
+same data with a flick of a switch. Incredibly powerful. Idea: Potentially swapping from 2D/3D with the same logic in an instant!
 
 
 # Example
