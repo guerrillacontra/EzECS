@@ -34,6 +34,8 @@ for real-time processing.
 
 * Inheritance only uses for creating Components and Systems - nothing else. It is a flat hierarchy of inheritance.
 
+* Incredibly low, almost zero Garbage Generation. Trimmed as far as possible and you should see almost if not always, zero garbage.
+
 
 # How to use
 
