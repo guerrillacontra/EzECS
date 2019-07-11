@@ -13,7 +13,7 @@ namespace Ez.Scripts
     /// of components.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public sealed class EzFamilyCache<T> where T : struct
+    public sealed class EzFamilyCache<T> : IDisposable  where T : struct
     {
         public delegate void FamilyNodeEventHandler(EzFamilyCache<T> cache, T node);
 

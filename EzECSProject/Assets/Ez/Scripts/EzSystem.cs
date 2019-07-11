@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -28,8 +31,6 @@ namespace Ez.Scripts
 
         [SerializeField] [Range(0, 100)] private int _priority = 0;
 
-        
-
         private void Start()
         {
             var space = GetComponent<EzEntitySpace>();
@@ -52,6 +53,23 @@ namespace Ez.Scripts
             OnInit(entitySpace);
         }
 
+        protected EzFamilyCache<T> CreateFamilyCache<T>() where T : struct
+        {
+            if (_familyCaches.ContainsKey(typeof(T)))
+            {
+                return (EzFamilyCache<T>) _familyCaches[typeof(T)];
+            }
+            
+            var cache = new EzFamilyCache<T>(_space);
+            cache.Init();
+            
+            _familyCaches.Add(typeof(T), cache);
+            
+            return cache;
+        }
+
+        
+        private readonly Dictionary<Type, object> _familyCaches = new Dictionary<Type, object>(2);
         private EzEntitySpace _space;
 
      
@@ -60,6 +78,15 @@ namespace Ez.Scripts
 
         public void Dispose(EzEntitySpace space)
         {
+            var caches = _familyCaches.Values.OfType<IDisposable>().ToArray();
+
+            foreach (var cache in caches)
+            {
+                cache.Dispose();
+            }
+            
+            _familyCaches.Clear();
+            
             OnDispose(space);
         }
 

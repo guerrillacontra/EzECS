@@ -9,8 +9,7 @@ namespace Testing.Scripts.Systems
     {
         protected override void OnInit(EzEntitySpace entitySpace)
         {
-            var fam = new EzFamilyCache<PlayerFamily>(entitySpace);
-            fam.Init();
+            var fam = CreateFamilyCache<PlayerFamily>();
             _players = fam.Nodes;
         }
 

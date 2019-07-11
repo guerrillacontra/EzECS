@@ -7,9 +7,9 @@ namespace Testing.Scripts.Systems
     {
         protected override void OnInit(EzEntitySpace entitySpace)
         {
-            _healthFamily = new EzFamilyCache<HealthFamily>(entitySpace);
-            _healthFamily.Init();
+            _healthFamily = CreateFamilyCache<HealthFamily>();
         }
+
         public void OnUpdate(EzEntitySpace space)
         {
             for (int i = 0; i < _healthFamily.Nodes.Count; i++)
