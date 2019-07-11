@@ -190,14 +190,6 @@ namespace Ez.Scripts
             _cachedParent = null;
         }
 
-#if UNITY_EDITOR
-
-
-        private void Update()
-        {
-            InvalidateSpace();
-        }
-
         /// <summary>
         /// Check if the entity has changed space and if so, migrate to the new space.
         /// </summary>
@@ -223,6 +215,14 @@ namespace Ez.Scripts
         }
 
         private Transform _cachedParent;
+
+#if UNITY_EDITOR
+
+
+        private void Update()
+        {
+            InvalidateSpace();
+        }
 
 #endif
 
