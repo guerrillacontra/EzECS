@@ -189,42 +189,79 @@ namespace Ez.Scripts
 
             _cachedParent = null;
         }
-
         /// <summary>
         /// Check if the entity has changed space and if so, migrate to the new space.
         /// </summary>
         private void InvalidateSpace()
         {
-            if (_cachedParent != transform.parent)
+            //have I been moved in the hierarchy?
+            
+            if (_cachedParent == transform.parent) return;
+
+            _cachedParent = transform.parent;
+     
+            //search up the tree to find the first ecs container
+            
+            var currentParent = transform.parent;
+
+            while (currentParent)
             {
-                var oldSpace = _cachedParent ? _cachedParent.GetComponent<EzEntitySpace>() : null;
-                var newSpace = transform.parent ? transform.parent.GetComponent<EzEntitySpace>() : null;
+                var container = currentParent ? currentParent.GetComponent<ECSContainer>() : null;
 
-                _cachedParent = transform.parent;
-
-                if (oldSpace != null)
+                if (container)
                 {
-                    oldSpace.UnregisterEntityDeferred(this);
+
+                    if (container == _container)
+                    {
+                        break;
+                    }
+                    
+                    if (_container)
+                    {
+                        _container.UnregisterEntityDeferred(this);
+                        
+                    }
+
+                    _container = container;
+                    
+                    _container.RegisterEntityDeferred(this);
+                    
+                    break;
                 }
 
-                if (newSpace != null)
+                currentParent = currentParent.parent;
+            }
+
+            if (!currentParent)
+            {
+                
+                if (_container)
                 {
-                    newSpace.RegisterEntityDeferred(this);
+                    _container.UnregisterEntityDeferred(this);
+                    _container = null;
                 }
             }
         }
 
         private Transform _cachedParent;
+        private ECSContainer _container;
 
 #if UNITY_EDITOR
-
-
         private void Update()
         {
-            InvalidateSpace();
+            _checkElapsed += Time.unscaledDeltaTime;
+
+            if (_checkElapsed < 1) return;
+
+            _checkElapsed = 0f;
+            
+           InvalidateSpace();
         }
 
+        private float _checkElapsed = 0f;
+
 #endif
+
 
         #endregion
 
