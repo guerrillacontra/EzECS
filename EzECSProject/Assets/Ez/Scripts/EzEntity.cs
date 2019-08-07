@@ -206,7 +206,7 @@ namespace Ez.Scripts
 
             while (currentParent)
             {
-                var container = currentParent ? currentParent.GetComponent<ECSContainer>() : null;
+                var container = currentParent ? currentParent.GetComponent<EzSpace>() : null;
 
                 if (container)
                 {
@@ -244,7 +244,7 @@ namespace Ez.Scripts
         }
 
         private Transform _cachedParent;
-        private ECSContainer _container;
+        private EzSpace _container;
 
 #if UNITY_EDITOR
         private void Update()
