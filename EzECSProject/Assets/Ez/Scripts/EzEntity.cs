@@ -181,14 +181,16 @@ namespace Ez.Scripts
         {
             if (!_cachedParent) return;
 
-            var oldSpace = _cachedParent ? _cachedParent.GetComponent<EzEntitySpace>() : null;
+            var oldSpace = _container;
 
             if (!oldSpace) return;
 
             oldSpace.UnregisterEntityDeferred(this);
 
             _cachedParent = null;
+            _container = null;
         }
+        
         /// <summary>
         /// Check if the entity has changed space and if so, migrate to the new space.
         /// </summary>
